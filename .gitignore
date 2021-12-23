@@ -1,0 +1,12 @@
+.idea/
+.vscode/
+.DS_Store
+.realize.yaml
+/vendor/
+conf.ini
+go-zentao-task
+*.csv
+*.sql
+*_test.go
+main
+/go.mod

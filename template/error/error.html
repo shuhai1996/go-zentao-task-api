@@ -1,0 +1,23 @@
+{{define "error/error"}}
+    <!DOCTYPE html>
+    <html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+        <title>Error</title>
+        <link rel="icon" href="data:;base64,=">
+        <link rel="stylesheet" href="//res.wx.qq.com/open/libs/weui/1.1.3/weui.min.css"/>
+    </head>
+    <body ontouchstart>
+
+    <div class="weui-msg" id="invoice_show">
+        <div class="weui-msg__icon-area">
+            <i class="weui-icon-info weui-icon_msg"></i>
+        </div>
+        <div class="weui-msg__text-area">
+            <h2 class="weui-msg__title">{{.msg}}</h2>
+        </div>
+    </div>
+    </body>
+    </html>
+{{end}}
