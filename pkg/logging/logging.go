@@ -3,8 +3,8 @@ package logging
 import (
 	"encoding/json"
 	log "github.com/sirupsen/logrus"
-	"go-zentao-task/pkg/config"
-	"go-zentao-task/pkg/gredis"
+	"go-zentao-task-api/pkg/config"
+	"go-zentao-task-api/pkg/gredis"
 	"io"
 	"os"
 	"time"

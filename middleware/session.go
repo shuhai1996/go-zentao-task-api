@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"go-zentao-task/core"
-	"go-zentao-task/pkg/session"
+	"go-zentao-task-api/core"
+	"go-zentao-task-api/pkg/session"
 )
 
 func Session(c *core.Context) {

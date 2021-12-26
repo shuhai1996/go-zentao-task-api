@@ -3,8 +3,8 @@ package session
 import (
 	"github.com/boj/redistore"
 	"github.com/gorilla/sessions"
-	"go-zentao-task/pkg/config"
-	"go-zentao-task/pkg/gredis"
+	"go-zentao-task-api/pkg/config"
+	"go-zentao-task-api/pkg/gredis"
 	"net/http"
 )
 

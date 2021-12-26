@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"go-zentao-task/core"
+	"go-zentao-task-api/core"
 	"net/http"
 )
 

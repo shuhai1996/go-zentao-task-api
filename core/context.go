@@ -2,10 +2,10 @@ package core
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-zentao-task/pkg/i18n"
-	"go-zentao-task/pkg/logging"
-	"go-zentao-task/pkg/session"
-	"go-zentao-task/service/errcode"
+	"go-zentao-task-api/pkg/i18n"
+	"go-zentao-task-api/pkg/logging"
+	"go-zentao-task-api/pkg/session"
+	"go-zentao-task-api/service/errcode"
 	"net/http"
 )
 

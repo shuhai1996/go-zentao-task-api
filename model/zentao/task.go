@@ -1,8 +1,9 @@
 package zentao
 
 import (
-	"github.com/jinzhu/gorm"
-	"go-zentao-task/pkg/db"
+	"errors"
+	"go-zentao-task-api/pkg/db"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -42,10 +43,10 @@ const StatusFinished = "finished" // 完成
 
 func (*Task) FindOne(id int) (*Task, error) {
 	var result Task
-	if err := db.Orm.Where(&Task{
+	if res := db.Orm.Where(&Task{
 		ID: id,
-	}).First(&result).Error; err != nil && !gorm.IsRecordNotFoundError(err) {
-		return nil, err
+	}).First(&result); res.Error != nil && errors.Is(res.Error, gorm.ErrRecordNotFound) {
+		return nil, res.Error
 	}
 	return &result, nil
 }
@@ -63,8 +64,8 @@ func (*Task) FindAll(assignedTo, status string, left float64, leftSort string) (
 		odb = odb.Where("`left` > ? ", 0)
 	}
 
-	if err := odb.Order("status desc").Order("`left` " + leftSort).Order("id desc").Find(&result).Error; err != nil && !gorm.IsRecordNotFoundError(err) {
-		return nil, err
+	if res := odb.Order("status desc").Order("`left` " + leftSort).Order("id desc").Find(&result); res.Error != nil && errors.Is(res.Error, gorm.ErrRecordNotFound) {
+		return nil, res.Error
 	}
 	return result, nil
 }

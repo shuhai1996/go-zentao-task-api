@@ -1,8 +1,9 @@
 package zentao
 
 import (
-	"github.com/jinzhu/gorm"
-	"go-zentao-task/pkg/db"
+	"errors"
+	"go-zentao-task-api/pkg/db"
+	"gorm.io/gorm"
 )
 
 type User struct {
@@ -27,11 +28,11 @@ func NewUser() *User {
 
 func (*User) FindOneByAccount(account string) (*User, error) {
 	var result User
-	if err := db.Orm.Where(&User{
+	if res := db.Orm.Where(&User{
 		Account: account,
 		Deleted: 0,
-	}).First(&result).Error; err != nil && !gorm.IsRecordNotFoundError(err) {
-		return nil, err
+	}).First(&result); res.Error != nil && errors.Is(res.Error, gorm.ErrRecordNotFound) {
+		return nil, errors.New("用户不存在")
 	}
 	return &result, nil
 }

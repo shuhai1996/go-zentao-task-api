@@ -1,10 +1,10 @@
 package middleware
 
 import (
-	"go-zentao-task/core"
-	"go-zentao-task/pkg/logging"
-	"go-zentao-task/pkg/rbac"
-	"go-zentao-task/service/errcode"
+	"go-zentao-task-api/core"
+	"go-zentao-task-api/pkg/logging"
+	"go-zentao-task-api/pkg/rbac"
+	"go-zentao-task-api/service/errcode"
 )
 
 func RBAC(c *core.Context) {

@@ -1,14 +1,15 @@
 package zentao
 
 import (
-	"github.com/jinzhu/gorm"
-	"go-zentao-task/pkg/db"
+	"errors"
+	"go-zentao-task-api/pkg/db"
+	"gorm.io/gorm"
 	"time"
 )
 
 type TaskEstimate struct {
 	ID       int     `json:"id"`
-	Task     int     `json:"task"`
+	Task     int     `json:"task.go"`
 	Date     string  `json:"date"`
 	Left     float64 `json:"left"`
 	Consumed float64 `json:"consumed"`
@@ -23,11 +24,11 @@ func (TaskEstimate) TableName() string {
 func (TaskEstimate) GetToday(account string) ([]TaskEstimate, error) {
 	var result []TaskEstimate
 	date := time.Now().Format("2006-01-02")
-	if err := db.Orm.Where(&TaskEstimate{
+	if res := db.Orm.Where(&TaskEstimate{
 		Date:    date,
 		Account: account,
-	}).Find(&result).Error; err != nil && !gorm.IsRecordNotFoundError(err) {
-		return nil, err
+	}).Find(&result); res.Error != nil && errors.Is(res.Error, gorm.ErrRecordNotFound) {
+		return nil, res.Error
 	}
 	return result, nil
 }

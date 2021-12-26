@@ -4,7 +4,7 @@ import (
 	"crypto/md5"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"go-zentao-task/pkg/config"
+	"go-zentao-task-api/pkg/config"
 	"io/ioutil"
 	"net/http"
 	"os"

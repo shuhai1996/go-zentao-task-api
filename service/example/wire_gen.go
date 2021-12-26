@@ -8,7 +8,7 @@ package example
 
 import (
 	"github.com/google/wire"
-	"go-zentao-task/model/example"
+	"go-zentao-task-api/model/example"
 )
 
 // Injectors from wire.go:

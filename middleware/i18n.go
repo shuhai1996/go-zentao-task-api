@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"go-zentao-task/core"
-	"go-zentao-task/pkg/i18n"
+	"go-zentao-task-api/core"
+	"go-zentao-task-api/pkg/i18n"
 	"golang.org/x/text/language"
 )
 

@@ -1,8 +1,9 @@
 package zentao
 
 import (
-	"github.com/jinzhu/gorm"
-	"go-zentao-task/pkg/db"
+	"errors"
+	"go-zentao-task-api/pkg/db"
+	"gorm.io/gorm"
 )
 
 type ProjectProduct struct {
@@ -22,10 +23,10 @@ func NewProjectProduct() *ProjectProduct {
 
 func (*ProjectProduct) FindOneByProject(project int) (*ProjectProduct, error) {
 	var result ProjectProduct
-	if err := db.Orm.Where(&ProjectProduct{
+	if res := db.Orm.Where(&ProjectProduct{
 		Project: project,
-	}).First(&result).Error; err != nil && !gorm.IsRecordNotFoundError(err) {
-		return nil, err
+	}).First(&result); res != nil && errors.Is(res.Error, gorm.ErrRecordNotFound) {
+		return nil, res.Error
 	}
 	return &result, nil
 }

@@ -3,7 +3,7 @@ package gredis
 import (
 	"errors"
 	"github.com/gomodule/redigo/redis"
-	"go-zentao-task/pkg/config"
+	"go-zentao-task-api/pkg/config"
 	"log"
 	"time"
 )
@@ -19,7 +19,6 @@ type redisConfig struct {
 
 func Setup() {
 	RedisPool = redisConnectPool("")
-	RedisLogPool = redisConnectPool(".log")
 }
 
 func getRedisConfig(store string) (conf *redisConfig, err error) {

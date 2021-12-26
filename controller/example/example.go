@@ -1,8 +1,8 @@
 package example
 
 import (
-	"go-zentao-task/core"
-	"go-zentao-task/service/example"
+	"go-zentao-task-api/core"
+	"go-zentao-task-api/service/example"
 )
 
 var serviceExample = example.InitializeServiceExample()

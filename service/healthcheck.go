@@ -3,12 +3,13 @@ package service
 import (
 	"errors"
 	"github.com/gomodule/redigo/redis"
-	"go-zentao-task/pkg/db"
-	"go-zentao-task/pkg/gredis"
+	"go-zentao-task-api/pkg/db"
+	"go-zentao-task-api/pkg/gredis"
 )
 
 func PingMysql() error {
-	return db.Orm.DB().Ping()
+	db, _ := db.Orm.DB()
+	return db.Ping()
 }
 
 func PingRedis() error {

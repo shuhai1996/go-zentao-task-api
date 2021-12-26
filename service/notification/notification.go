@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"go-zentao-task/pkg/util"
+	"go-zentao-task-api/pkg/util"
 	"io/ioutil"
 	"net/http"
 )
@@ -33,8 +33,8 @@ func (notification *Notification) SendNotification(name string, estimate string,
 	// 构造POST请求
 	marksData := Marks{}
 	marksData.Content = "禅道<font color=\"warning\">工时</font>，请相关同事注意。\n>"
-	if estimate =="" && len(mapping)>0 {
-		for k,v :=range mapping {
+	if estimate == "" && len(mapping) > 0 {
+		for k, v := range mapping {
 			marksData.Content += "昵称<font color=\"comment\">" + k + "</font>已填用时:<font color=\"comment\">" + fmt.Sprintf("%.2f", v) + "</font>\n>"
 		}
 	} else {
@@ -42,7 +42,7 @@ func (notification *Notification) SendNotification(name string, estimate string,
 	}
 
 	postBody := &PostBody{
-		Msgtype: "markdown",
+		Msgtype:  "markdown",
 		Markdown: marksData,
 	}
 	// struct 转json

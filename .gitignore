@@ -4,7 +4,7 @@
 .realize.yaml
 /vendor/
 conf.ini
-go-zentao-task
+go-zentao-task-api
 *.csv
 *.sql
 *_test.go

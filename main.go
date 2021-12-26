@@ -1,7 +1,7 @@
 package main
 
 import (
-	"go-zentao-task/core"
+	"go-zentao-task-api/app"
 	"log"
 	"os"
 	"os/signal"
@@ -13,7 +13,7 @@ func main() {
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	var env = "development"
-	go core.RunServer(env, quit) //运行服务
+	go app.RunServer(env) //运行服务
 	<-quit
 	log.Println("关闭服务 ...")
 	log.Println("服务已退出")

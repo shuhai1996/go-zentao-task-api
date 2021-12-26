@@ -1,8 +1,9 @@
 package zentao
 
 import (
-	"github.com/jinzhu/gorm"
-	"go-zentao-task/pkg/db"
+	"errors"
+	"go-zentao-task-api/pkg/db"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -52,11 +53,11 @@ func (*Action) Create(objectID int, objectType string, product string, project i
 
 func (*Action) FindLastLogin(actor string) (*Action, error) {
 	var result Action
-	if err := db.Orm.Where(&Action{
+	if res := db.Orm.Where(&Action{
 		Actor:  actor,
 		Action: ActionLogin,
-	}).Order("id desc").First(&result).Error; err != nil && !gorm.IsRecordNotFoundError(err) {
-		return nil, err
+	}).Order("id desc").First(&result); res.Error != nil && errors.Is(res.Error, gorm.ErrRecordNotFound) {
+		return nil, res.Error
 	}
 	return &result, nil
 }

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
-	"go-zentao-task/pkg/logging"
+	"go-zentao-task-api/pkg/logging"
 	"net/http"
 )
 

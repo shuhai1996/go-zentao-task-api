@@ -2,8 +2,8 @@ package example
 
 import (
 	"errors"
-	"github.com/jinzhu/gorm"
-	"go-zentao-task/pkg/db"
+	"go-zentao-task-api/pkg/db"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -23,11 +23,11 @@ func (DemoGin) TableName() string {
 
 func FindAll(clientCode string) ([]DemoGin, error) {
 	var result []DemoGin
-	if err := db.Orm.Where(&DemoGin{
+	if res := db.Orm.Where(&DemoGin{
 		ClientCode: clientCode,
 		Status:     1,
-	}).Find(&result).Error; err != nil && !gorm.IsRecordNotFoundError(err) {
-		return nil, err
+	}).Find(&result); res.Error != nil && errors.Is(res.Error, gorm.ErrRecordNotFound) {
+		return nil, res.Error
 	}
 	return result, nil
 }
@@ -39,11 +39,11 @@ func FindOne(clientCode string) (*DemoGin, error) {
 
 	// SELECT * FROM demo_gin WHERE client_code = "client_code";
 	var result DemoGin
-	if err := db.Orm.Where(&DemoGin{
+	if res := db.Orm.Where(&DemoGin{
 		ClientCode: clientCode,
 		Status:     0,
-	}).First(&result).Error; err != nil && !gorm.IsRecordNotFoundError(err) {
-		return nil, err
+	}).First(&result); res.Error != nil && errors.Is(res.Error, gorm.ErrRecordNotFound) {
+		return nil, res.Error
 	}
 	return &result, nil
 }
@@ -92,8 +92,8 @@ func Delete(id int) (int64, error) {
 
 func RawSql() (*DemoGin, error) {
 	var result DemoGin
-	if err := db.Orm.Raw("select * from demo_gin where id = ?", 1).Scan(&result).Error; err != nil && !gorm.IsRecordNotFoundError(err) {
-		return nil, err
+	if res := db.Orm.Raw("select * from demo_gin where id = ?", 1).Scan(&result); res.Error != nil && errors.Is(res.Error, gorm.ErrRecordNotFound) {
+		return nil, res.Error
 	}
 	return &result, nil
 }

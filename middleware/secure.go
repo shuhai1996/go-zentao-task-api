@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-zentao-task/pkg/config"
+	"go-zentao-task-api/pkg/config"
 )
 
 type SecureConfig struct {

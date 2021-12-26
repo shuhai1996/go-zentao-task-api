@@ -2,9 +2,9 @@ package db
 
 import (
 	"errors"
-	_ "github.com/go-sql-driver/mysql"
-	"github.com/jinzhu/gorm"
-	"go-zentao-task/pkg/config"
+	"go-zentao-task-api/pkg/config"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 	"log"
 	"time"
 )
@@ -21,15 +21,18 @@ func mysqlConnectPool(store string) *gorm.DB {
 		log.Fatalln(err)
 	}
 
-	var orm *gorm.DB
-	orm, err = gorm.Open("mysql", dsn)
-	if err != nil {
-		log.Fatalln(err)
+	orm, er := gorm.Open(mysql.Open(dsn))
+	if er != nil {
+		log.Fatalln(er)
 	}
+	sqlDB, e := orm.DB()
+	if e != nil {
+		log.Fatalln(e)
+	}
+	sqlDB.SetMaxIdleConns(50)                   //设置连接池最大空闲连接数
+	sqlDB.SetMaxOpenConns(100)                  //设置打开连接个数
+	sqlDB.SetConnMaxLifetime(300 * time.Second) //设置连接最大生命周期
 
-	orm.DB().SetMaxIdleConns(50)
-	orm.DB().SetMaxOpenConns(100)
-	orm.DB().SetConnMaxLifetime(300 * time.Second)
 	return orm
 }
 

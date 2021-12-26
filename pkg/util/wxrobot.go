@@ -1,6 +1,6 @@
 package util
 
-import "go-zentao-task/pkg/config"
+import "go-zentao-task-api/pkg/config"
 
 func GetRobotUrl() string {
 	//获取机器人webhook地址
