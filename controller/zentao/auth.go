@@ -10,7 +10,7 @@ import (
 type Auth struct {
 }
 
-var service = zentao.InitializeService()
+var service = zentao.InitializeUserService()
 
 type AuthLoginRequest struct {
 	Account  string `json:"account" binding:"required"`
