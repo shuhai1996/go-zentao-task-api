@@ -1,5 +1,5 @@
 ## go-zentao-task-api
-
+跟go-zentao-task 项目相比，gorm从1.9升为2.0,新增redis、elasticsearch，es版本为7.16
 #### 配置
 根目录下创建conf.ini文件，添加如下配置
 ```
@@ -22,6 +22,7 @@ es.port=9200
 ```
 go mod init go-zentao-task-api
 go mod vendor //将下载到GOPATH的包复制到当前项目的vendor目录下
+go mod tidy //整理包依赖
 ```
 #### 运行本项目
 执行如下命令即可运行

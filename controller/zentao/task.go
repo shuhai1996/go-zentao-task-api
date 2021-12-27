@@ -3,10 +3,13 @@ package zentao
 import (
 	"github.com/gin-gonic/gin"
 	"go-zentao-task-api/core"
+	"go-zentao-task-api/service/zentao"
 )
 
 type Task struct {
 }
+
+var taskService = zentao.InitializeTaskService()
 
 type TaskIndexRequest struct {
 	Page     int    `form:"page" binding:"required"`
@@ -24,15 +27,13 @@ func (*Task) Index(c *core.Context) {
 		c.Fail(40100, err.Error(), nil)
 		return
 	}
-
-	if u := c.Request.URL.Query().Get("account"); u != "" {
-		service.User.Account = u
-	} else {
+	u := c.Request.URL.Query().Get("account")
+	s := c.Request.URL.Query().Get("status")
+	if u == "" {
 		user := c.GetStringMap("user_info")
 		u = user["account"].(string)
 	}
-
-	res := service.GetAllTaskNotDone()
+	res := taskService.GetAllTaskByAccount(u, s)
 	if res == nil {
 		c.Fail(400, "找不到任务", nil)
 		return
