@@ -11,17 +11,20 @@ import (
 	"go-zentao-task-api/model/zentao"
 	"go-zentao-task-api/pkg/gredis"
 	"go-zentao-task-api/pkg/util"
+	"strconv"
 )
 
 type UserService struct {
 	U *zentao.User
+	A *zentao.Action
 }
 
 var User *UserService
 
 func InitializeUserService() *UserService {
 	user := zentao.NewUser()
-	User = &UserService{U:user}
+	action := zentao.NewAction()
+	User = &UserService{U:user, A: action}
 	return User
 }
 
@@ -44,6 +47,8 @@ func (us *UserService) UserLogin(account string, password string) (*util.Respons
 	}
 	conn.Do("expire", UserInfoPrefix+token, 1800) //nolint 无操作 30分钟后过期
 	fmt.Println(u.Realname + "登陆成功！")
+	//创建操作记录
+	us.A.Create(u.ID, "user", ","+strconv.Itoa(0)+",", 0, 0, u.Account, zentao.ActionLogin, "")
 	return util.ReturnResponse(200, "success", map[string]string{
 		"access_token": token,
 	}), err

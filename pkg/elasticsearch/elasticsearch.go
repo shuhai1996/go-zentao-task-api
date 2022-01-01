@@ -18,6 +18,8 @@ type EsClientType struct {
 type esConfig struct {
 	host string
 	port string
+	username string
+	password string
 }
 
 var Timeout = "1s"        //超时时间
@@ -32,13 +34,15 @@ func esConnectPool(store string) {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	EsClient = newEsPool("http://" + conf.host + ":" + conf.port)
+	EsClient = newEsPool("http://" + conf.username +":"+ conf.password + "@"+conf.host + ":" + conf.port)
 }
 
 func getEsConfig(store string) (conf *esConfig, err error) {
 	conf = &esConfig{
 		host: config.Get("es.host" + store),
 		port: config.Get("es.port" + store),
+		username: config.Get("es.user" + store),
+		password: config.Get("es.pass" + store),
 	}
 	if conf.host == "" {
 		err = errors.New("redis.host" + store + "不能为空")
@@ -132,8 +136,6 @@ func (client *EsClientType) Delete(Params map[string]string) string {
 	if err != nil {
 		println(err.Error())
 	}
-
-	fmt.Printf("delete result %s\n", res.Result)
 	return res.Result
 }
 
@@ -158,22 +160,22 @@ func (client *EsClientType) Update(Params map[string]string) string {
 }
 
 // Gets 查找
-func (client *EsClientType) Gets(Params map[string]string) *elastic.GetResult {
+func (client *EsClientType) Gets(Params map[string]string) (*elastic.GetResult,error) {
 	//通过id查找
 	var get1 *elastic.GetResult
 	var err error
 	if len(Params["id"]) < 0 {
-		fmt.Printf("param error")
-		return get1
+		err = errors.New("param error")
+		return get1, err
 	}
 
 	get1, err = client.EsCon.Get().Index(Params["index"]).Type(Params["type"]).Id(Params["id"]).Do(context.Background())
 
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	return get1
+	return get1, nil
 }
 
 //搜索
@@ -203,13 +205,13 @@ func (client *EsClientType) List(Params map[string]string) *elastic.SearchResult
 	var err error
 	size, _ := strconv.Atoi(Params["size"])
 	page, _ := strconv.Atoi(Params["page"])
-	q := elastic.NewQueryStringQuery(Params["queryString"])
+	//q := elastic.NewQueryStringQuery(Params["queryString"])
 
 	//排序类型 desc asc es 中只使用 bool 值  true or false
-	sort_type := true
-	if Params["sort_type"] == "desc" {
-		sort_type = false
-	}
+	//sortType := true
+	//if Params["sort_type"] == "desc" {
+	//	sortType = false
+	//}
 	//fmt.Printf(" sort info  %s,%s\n", Params["sort"],Params["sort_type"])
 	if size < 0 || page < 0 {
 		fmt.Printf("param error")
@@ -218,10 +220,10 @@ func (client *EsClientType) List(Params map[string]string) *elastic.SearchResult
 	if len(Params["queryString"]) > 0 {
 		res, err = client.EsCon.Search(Params["index"]).
 			Type(Params["type"]).
-			Query(q).
+			//Query(q).
 			Size(size).
 			From((page)*size).
-			Sort(Params["sort"], sort_type).
+			//Sort(Params["sort"], sortType).
 			Timeout(Timeout).
 			Do(context.Background())
 
@@ -230,7 +232,7 @@ func (client *EsClientType) List(Params map[string]string) *elastic.SearchResult
 			Type(Params["type"]).
 			Size(size).
 			From((page)*size).
-			Sort(Params["sort"], sort_type).
+			//Sort(Params["sort"], sortType).
 			//SortBy(elastic.NewFieldSort("add_time").UnmappedType("long").Desc(), elastic.NewScoreSort()).
 			Timeout(Timeout).
 			Do(context.Background())

@@ -39,11 +39,16 @@ func Register(env string) *gin.Engine {
 	)
 	{
 		//用户
-		zt.GET("/auth/info", core.Handle(new(zentao.Auth).GetAuthInfo))
-		zt.POST("/auth/logout", core.Handle(new(zentao.Auth).Logout))
+		zt.GET("auth/info", core.Handle(new(zentao.Auth).GetAuthInfo))
+		zt.POST("auth/logout", core.Handle(new(zentao.Auth).Logout))
 
 		//任务
 		zt.GET("task/list", core.Handle(new(zentao.Task).Index))
+
+		//行为
+		zt.GET("action/list", core.Handle(new(zentao.Actions).Index))
+		zt.GET("action/:id", core.Handle(new(zentao.Actions).View))
+		zt.DELETE("action/:id", core.Handle(new(zentao.Actions).Delete))
 	}
 
 	g.GET("/v1/v2/i18n", core.Handle(func(c *core.Context) {

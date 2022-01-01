@@ -16,6 +16,8 @@ redis.port =6379
 #es
 es.host=127.0.0.1
 es.port=9200
+es.user=
+es.pass=
 ```
 #### 包管理
 新的项目，复制完代码以后，全局替换go-zentao-task-api为你的项目名称，删除go.mod和go.sum文件，执行下列命令：
