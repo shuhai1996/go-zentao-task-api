@@ -10,7 +10,7 @@ const (
 	UserInfoPrefix = "zentao:userinfo:"
 )
 
-func (us *Service) GetUserInfoByToken(token string) (*util.Response, error) {
+func (service *Service) GetUserInfoByToken(token string) (*util.Response, error) {
 	conn := gredis.RedisPool.Get()
 	defer conn.Close()
 
@@ -19,7 +19,7 @@ func (us *Service) GetUserInfoByToken(token string) (*util.Response, error) {
 		return util.ReturnResponse(400, err.Error(), nil), err
 	}
 
-	data := us.User
+	data := service.User
 
 	if err := redis.ScanStruct(cache, data); err != nil {
 		return util.ReturnResponse(400, err.Error(), nil), err

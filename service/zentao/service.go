@@ -111,7 +111,7 @@ func (service *Service) UpdateTask(task int, estimate float64, action string) fl
 	}
 
 	//创建操作记录
-	service.Action.Create(task, "task.go", ","+strconv.Itoa(productInfo.Product)+",", taskInfo.Project, taskInfo.Execution, taskInfo.AssignedTo, action, strconv.FormatFloat(estimate, 'f', -1, 64))
+	service.Action.Create(task, "task", ","+strconv.Itoa(productInfo.Product)+",", taskInfo.Project, taskInfo.Execution, taskInfo.AssignedTo, action, strconv.FormatFloat(estimate, 'f', -1, 64))
 	//创建工时填写记录
 	service.Estimate.Create(task, taskInfo.Left, estimate, taskInfo.AssignedTo, "")
 	//更新任务
@@ -194,3 +194,14 @@ OuterLoop: // 循环标签
 //		service.Action.Create(service.User.ID, "user", ","+strconv.Itoa(0)+",", 0, 0, service.User.Account, zentao.ActionLogin, "")
 //	}
 //}
+func (service *Service) getActionList() {
+	action, _ := service.Action.FindLastLogin(service.User.Account)
+	// 当前时间往前推三个小时
+	add, _ := time.ParseDuration("-3h")
+	last := time.Now().Add(add)
+	if last.Sub(action.Date).Seconds() > 0 { //记录时间在三小时前
+		//创建操作记录
+		service.Action.Create(service.User.ID, "user", ","+strconv.Itoa(0)+",", 0, 0, service.User.Account, zentao.ActionLogin, "")
+	}
+}
+

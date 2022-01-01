@@ -28,6 +28,8 @@ func (Action) TableName() string {
 	return "zt_action"
 }
 
+var es = NewEsAction()
+
 func NewAction() *Action {
 	return &Action{}
 }
@@ -47,6 +49,10 @@ func (*Action) Create(objectID int, objectType string, product string, project i
 	op := db.Orm.Create(data)
 	if op.Error != nil {
 		return 0, op.Error
+	}
+	_,err := es.Create(data)
+	if err!= nil {
+		return 0, err
 	}
 	return data.ID, nil
 }
