@@ -18,6 +18,9 @@ es.host=127.0.0.1
 es.port=9200
 es.user=
 es.pass=
+#kafka
+kafka.host=127.0.0.1
+kafka.port=9092
 ```
 #### 包管理
 新的项目，复制完代码以后，全局替换go-zentao-task-api为你的项目名称，删除go.mod和go.sum文件，执行下列命令：
@@ -38,3 +41,7 @@ go build main.go
 > [GORM 2.0 使用教程(中文文档)](https://www.bookstack.cn/read/gorm-2.0/docs-index.md)
 > 
 > [https://gin-gonic.com/](https://gin-gonic.com/)
+> 
+> [elasticsearch 7.16 guide](https://www.elastic.co/guide/en/elasticsearch/reference/7.16/index.html)
+> 
+> [confluent-kafka-go-demo](https://github.com/confluentinc/confluent-kafka-go/blob/master/examples/consumer_example/consumer_example.go)
