@@ -10,3 +10,4 @@ go-zentao-task-api
 *_test.go
 main
 /go.mod
+cmd/consumer/consumer

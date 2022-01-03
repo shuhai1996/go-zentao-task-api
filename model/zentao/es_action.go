@@ -43,7 +43,7 @@ func (es *EsAction) Create(data interface{}) (interface{}, error) {
 	body,_ = json.Marshal(m) //再转成json
 	request["bodyJson"] = string(body)
 	request["index"] = es.Index
-	request["id"] = strconv.Itoa(int(m["id"].(float64)))
+	request["id"] = m["id"].(string)
 	request["type"] = es.Type
 	fmt.Println(request)
 	return elasticsearch.EsClient.Create(request), nil
@@ -79,7 +79,7 @@ func (es *EsAction) Find(id string) (*elastic.GetResult, error) {
 }
 
 func formatData(t string) int64 {
-	tUtc, _ := time.Parse(time.RFC3339Nano, t) //utc时间 string 类型转 成time 类型
+	tUtc, _ := time.Parse("2006-01-02 15:04:05", t) //utc时间 string 类型转 成time 类型
 	return  tUtc.UTC().Unix()
 }
 
