@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"reflect"
 	"syscall"
 )
 
@@ -26,7 +27,8 @@ func (c *Consumer) init() error{
 	return nil
 }
 
-func (c *Consumer) run() {
+func (c *Consumer) run(child interface{}) {
+	ref := reflect.ValueOf(child) //通过反射调用子类对象
 	err:=c.init()//先进行初始化
 	if err != nil {
 		log.Panicf(err.Error())
@@ -50,7 +52,14 @@ func (c *Consumer) run() {
 			if err != nil {
 				log.Printf("Consumer error: %v (%v)", err, msg)
 			} else {
-				c.DealMessage(msg)
+				method := ref.MethodByName("DealMessage")
+				if method.IsValid() { //子类方法存在调用子类方法,否则实现父类方法
+					params := make([]reflect.Value, 1) // 设置参数，参数是一个 Value 的 slice
+					params[0] = reflect.ValueOf(msg)
+					method.Call(params) //调用方法
+				} else {
+					c.DealMessage(msg)
+				}
 			}
 		}
 	}()
@@ -66,8 +75,10 @@ func (c *Consumer) run() {
 	}
 }
 
+//DealMessage 处理消息
 func (c *Consumer) DealMessage(msg *kafka.Message) {
 	fmt.Printf("Message on %s: %s\n", msg.TopicPartition, string(msg.Value))
+	fmt.Println("parent")
 }
 
 

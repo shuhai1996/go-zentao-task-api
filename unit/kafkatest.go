@@ -7,12 +7,11 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 )
 
 var (
 	broker = "127.0.0.1:9092"//实例地址
-	topic = "example"
+	topic = "zt_action_topic"
 )
 
 func TestConsumer()  {
@@ -25,11 +24,9 @@ func TestConsumer()  {
 		"max.poll.interval.ms": 120000,
 		"fetch.max.bytes": 1024000,
 		"max.partition.fetch.bytes": 256000,
-		"debug": "all",
 	}
 	kafkaconf.SetKey("bootstrap.servers", broker)
 	kafkaconf.SetKey("group.id", "test-consumer-group")
-	kafkaconf.SetKey("security.protocol", "plaintext")
 	kafkaconf.SetKey("broker.address.family", "v4")
 	consumer, err := kafka.NewConsumer(kafkaconf)
 	if err != nil {
@@ -52,16 +49,15 @@ func TestConsumer()  {
 			} else {
 				fmt.Printf("Message on %s: %s\n", msg.TopicPartition, string(msg.Value))
 			}
-			time.Sleep(1000)
 		}
 	}()
 
-	sigterm := make(chan os.Signal, 1)
-	signal.Notify(sigterm, syscall.SIGINT, syscall.SIGTERM)
-	select {
-	case <-sigterm:
-		log.Println("terminating: via signal")
-	}
+	//sigterm := make(chan os.Signal, 1)
+	//signal.Notify(sigterm, syscall.SIGINT, syscall.SIGTERM)
+	//select {
+	//case <-sigterm:
+	//	log.Println("terminating: via signal")
+	//}
 	if err = consumer.Close(); err != nil {
 		log.Panicf("Error closing consumer: %v", err)
 	}
@@ -86,12 +82,13 @@ func Test2()  {
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Failed to create consumer: %s\n", err)
-		os.Exit(1)
 	}
+
+	defer c.Close()
 
 	fmt.Printf("Created Consumer %v\n", c)
 
-	err = c.Subscribe("example", nil)
+	err = c.Subscribe(topic, nil)
 	run := true
 
 	for run {
