@@ -35,6 +35,14 @@ go mod tidy //整理包依赖
 go build main.go
 ./main
 ```
+#### kafka队列启动
+切到cmd脚本目录下的consumer
+```
+cd ./cmd/consumer
+go build  -tags dynamic
+./consumer
+```
+
 
 > 参考链接
 > 
