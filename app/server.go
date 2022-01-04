@@ -1,15 +1,16 @@
 package app
-
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/soheilhy/cmux"
 	"go-zentao-task-api/pkg/config"
 	"go-zentao-task-api/pkg/db"
 	"go-zentao-task-api/pkg/elasticsearch"
 	"go-zentao-task-api/pkg/gredis"
 	"go-zentao-task-api/pkg/logging"
 	"go-zentao-task-api/router"
+	"google.golang.org/grpc"
 	"log"
-	"net/http"
+	"net"
 )
 
 func setup(env string) {
@@ -23,14 +24,28 @@ func setup(env string) {
 func RunServer(env string) { //服务运行
 	setup(env)
 	gin.SetMode(gin.ReleaseMode)
-	r := router.Register(env)
-	srv := &http.Server{
-		Addr:    ":8899",
-		Handler: r,
+	// Create the main listener.
+	l, err := net.Listen("tcp", ":8899")
+	if err != nil {
+		log.Fatal(err)
 	}
+
+	// Create a cmux.
+	m := cmux.New(l)
+
+	// grpc
+	grpcL := m.Match(cmux.HTTP2HeaderField("content-type", "application/grpc"))
+	grpcS := grpc.NewServer()
+
+	go grpcS.Serve(grpcL)
+
+	// gin
+	httpL := m.Match(cmux.HTTP1Fast())
+	r:= router.Register(env)
 	go func() {
-		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("listen: %s\n", err)
-		}
+		r.RunListener(httpL)//监听
 	}()
+
+	// Start serving!
+	m.Serve()
 }
