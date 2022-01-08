@@ -1,0 +1,21 @@
+syntax = "proto3";
+option go_package = "/grpc/proto/hello";
+
+package math;
+
+// The greeting service definition.
+service MathGreeter {
+    // Sends a greeting
+    rpc Calculate (Num) returns (CalReply) {}
+}
+
+// The request message containing the user's name.
+message Num {
+    int64 name1 = 1;
+    int64 name2 = 2;
+}
+
+// The response message containing the greetings
+message CalReply {
+    int64 message = 1;
+}

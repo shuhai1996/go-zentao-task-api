@@ -53,3 +53,9 @@ go build  -tags dynamic
 > [elasticsearch 7.16 guide](https://www.elastic.co/guide/en/elasticsearch/reference/7.16/index.html)
 > 
 > [confluent-kafka-go-demo](https://github.com/confluentinc/confluent-kafka-go/blob/master/examples/consumer_example/consumer_example.go)
+> 
+> [cmux 源码解析](https://xumc.github.io/blog/2019/09/22/cmux-source-analyze)
+> 
+> [gRPC over HTTP2](https://juejin.cn/post/6864835767076814855)
+> 
+> [gRPC: 使用 Buf 快速编译 protobuf 文件](https://juejin.cn/post/7012293349268783112)
