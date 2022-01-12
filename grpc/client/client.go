@@ -1,13 +1,15 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"flag"
 	"fmt"
 	pb "go-zentao-task-api/grpc/proto/hello"
-	pbm "go-zentao-task-api/grpc/proto/math"
 	"google.golang.org/grpc"
+	"io/ioutil"
 	"log"
+	"net/http"
 	"time"
 )
 
@@ -28,8 +30,8 @@ func main() {
 	}
 	fmt.Println(conn.GetState().String())
 	defer conn.Close()
-	c := pb.NewGreeterClient(conn)
-	m := pbm.NewMathGreeterClient(conn)
+	c:= pb.NewGreeterClient(conn)
+	//m := pbm.NewMathGreeterClient(conn)
 	// Contact the server and print out its response.
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
@@ -38,9 +40,35 @@ func main() {
 		log.Fatalf("could not greet: %v", err)
 	}
 	log.Printf("Greeting: %s", r.GetMessage())
-	rm, err := m.Calculate(ctx, &pbm.Num{Name1: *num1, Name2: *num2})
+	//rm, err := m.Calculate(ctx, &pbm.Num{Name1: *num1, Name2: *num2})
+	//if err != nil {
+	//	log.Fatalf("could not greet: %v", err)
+	//}
+	//log.Printf("Greeting: %v", rm.GetMessage())
+
+	// 构造POST请求
+	uri := "http://127.0.0.1:8899/rpc/math/calculate"
+	params := []byte(`{
+    "name1": 4,
+    "name2": 6
+	}`)
+	re, _:= http.NewRequest("POST", uri, bytes.NewReader(params))
+	re.Header.Add("Content-Type", "application/grpc+json")
+	client := &http.Client{}
+	resp, err := client.Do(re)
 	if err != nil {
-		log.Fatalf("could not greet: %v", err)
+		fmt.Println(err.Error())
 	}
-	log.Printf("Greeting: %v", rm.GetMessage())
+
+	defer resp.Body.Close()
+
+	statuscode := resp.StatusCode
+	hea := resp.Header
+	bodyw, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	fmt.Println(hea)
+	fmt.Println(statuscode)
+	fmt.Println(string(bodyw))
 }

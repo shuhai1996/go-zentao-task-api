@@ -1,12 +1,19 @@
 syntax = "proto3";
-option go_package = "/grpc/proto/hello";
+option go_package = "/grpc/proto/math";
 
 package math;
+
+import "google/api/annotations.proto";
 
 // The greeting service definition.
 service MathGreeter {
     // Sends a greeting
-    rpc Calculate (Num) returns (CalReply) {}
+    rpc Calculate (Num) returns (CalReply) {
+              option (google.api.http) = {
+               post: "/rpc/math/calculate"
+             body: "*"
+             };
+    }
 }
 
 // The request message containing the user's name.
