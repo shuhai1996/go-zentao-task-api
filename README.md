@@ -42,7 +42,13 @@ cd ./cmd/consumer
 go build  -tags dynamic
 ./consumer
 ```
-
+#### grpc客户端测试
+正常启动服务，然后另起终端，
+```
+cd ./grpc/client
+go build
+./client
+```
 
 > 参考链接
 > 
@@ -59,3 +65,5 @@ go build  -tags dynamic
 > [gRPC over HTTP2](https://juejin.cn/post/6864835767076814855)
 > 
 > [gRPC: 使用 Buf 快速编译 protobuf 文件](https://juejin.cn/post/7012293349268783112)
+> 
+> [gRPC gateway](https://grpc-ecosystem.github.io/grpc-gateway/)

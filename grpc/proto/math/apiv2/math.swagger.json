@@ -1,0 +1,106 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "math.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "MathGreeter"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/rpc/math/calculate": {
+      "post": {
+        "summary": "Sends a greeting",
+        "operationId": "MathGreeter_Calculate",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/mathCalReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/mathNum"
+            }
+          }
+        ],
+        "tags": [
+          "MathGreeter"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "mathCalReply": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "format": "int64"
+        }
+      },
+      "title": "The response message containing the greetings"
+    },
+    "mathNum": {
+      "type": "object",
+      "properties": {
+        "name1": {
+          "type": "string",
+          "format": "int64"
+        },
+        "name2": {
+          "type": "string",
+          "format": "int64"
+        }
+      },
+      "description": "The request message containing the user's name."
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}
