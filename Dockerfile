@@ -7,4 +7,4 @@ COPY . .
 # 暴露端口
 EXPOSE 8899
 # 执行命令
-RUN go build main.go && go run ./main
+RUN go build main.go && ./main
