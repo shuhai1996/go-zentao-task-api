@@ -1,0 +1,75 @@
+version: '3.4'
+
+services:
+  server:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    container_name: go-zentao
+    ports:
+      - 8899:8899
+    volumes:
+      - /go/src/go-zentao-task-api:/go/src/go-zentao-task-api
+    depends_on:
+      - mysql
+      - elasticsearch
+      - redis
+    links:
+      - mysql
+      - elasticsearch
+      - redis
+
+  mysql:
+    image: mysql:8.0.2
+    container_name: mysql8.0 # 容器名
+    ports:
+      - 3306:3306
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+      - ./init:/docker-entrypoint-initdb.d/
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: password
+
+  elasticsearch:
+    image: "elasticsearch:7.16.2"
+    container_name: elasticsearch # 容器名
+    environment:
+      - discovery.type=single-node
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /docker_es/data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+
+  logstash:
+    depends_on:
+      - elasticsearch
+    image: "logstash:7.16.2"
+    volumes:
+      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    ports:
+      - "5044:5044"
+    links:
+      - elasticsearch
+
+  kibana:
+    depends_on:
+      - elasticsearch
+    image: "kibana:7.16.2"
+    environment:
+      - ELASTICSEARCH_URL=http://127.0.0.1:9200
+    volumes:
+      - /etc/localtime:/etc/localtime
+    ports:
+      - "5601:5601"
+    links:
+      - elasticsearch
+
+  redis:
+      image: redis:6.2.6
+      container_name: redis # 容器名
+      restart: always
+      ports:
+        - '6379:6379'
