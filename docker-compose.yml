@@ -9,7 +9,7 @@ services:
     ports:
       - "8899:8899"
     volumes:
-      - /go/src/go-zentao-task-api:/go/src/go-zentao-task-api
+      - ./:/go/src/go-zentao-task-api
     depends_on:
       - mysql
       - elasticsearch
@@ -20,7 +20,7 @@ services:
       - redis
 
   mysql:
-    image: mysql:8.0.2
+    image: "mysql8.0:v1"
     container_name: mysql8.0 # 容器名
     ports:
       - "3306:3306"
@@ -28,8 +28,8 @@ services:
       - ./data/mysql:/var/lib/mysql
       - ./init:/docker-entrypoint-initdb.d/
     environment:
-      - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_DATABASE=test_db
+      MYSQL_DATABASE: test_db
+      MYSQL_ROOT_PASSWORD: password
 
   elasticsearch:
     image: "elasticsearch:7.16.2"
@@ -39,7 +39,7 @@ services:
       - ES_JAVA_OPTS=-Xms256m -Xmx256m
     volumes:
       - /etc/localtime:/etc/localtime
-      - /docker_es/data:/usr/share/elasticsearch/data
+      - ./docker_es/data:/usr/share/elasticsearch/data
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -49,7 +49,7 @@ services:
       - elasticsearch
     image: "logstash:7.16.2"
     volumes:
-      - /etc/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./docker_es/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
     ports:
       - "5044:5044"
     links:
@@ -69,8 +69,36 @@ services:
       - elasticsearch
 
   redis:
-      image: redis:6.2.6
-      container_name: redis # 容器名
+    image: "redis:6.2.6"
+    container_name: redis # 容器名
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./data/redis:/data
+    command: redis-server /data/redis.conf
+    privileged: true
+
+  zookeeper:
+      image: wurstmeister/zookeeper
       restart: always
+      container_name: zookeeper
       ports:
-        - "6379:6379"
+        - "2181:2181"
+      expose:
+        - "2181"
+      environment:
+        - ZOO_MY_ID=1
+  kafka:
+      image: wurstmeister/kafka
+      restart: always
+      container_name: kafka
+      environment:
+        - KAFKA_BROKER_ID=1
+        - KAFKA_LISTENERS=PLAINTEXT://kafka:9090
+        - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+        - KAFKA_MESSAGE_MAX_BYTES=2000000
+      ports:
+        - "9090:9090"
+      depends_on:
+        - zookeeper

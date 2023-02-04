@@ -1,1 +1,5 @@
 .git/
+/data/
+/docker_es
+.idea/
+.vscode/

@@ -9,5 +9,6 @@ go-zentao-task-api
 *.sql
 *_test.go
 main
-/go.mod
 cmd/consumer/consumer
+/data
+docker_es

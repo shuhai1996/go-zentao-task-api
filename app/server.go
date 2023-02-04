@@ -32,10 +32,10 @@ func setup(env string) {
 
 func RunServer(env string) { //服务运行
 	setup(env)
-	gin.SetMode(gin.DebugMode)
+	gin.SetMode(gin.ReleaseMode)
 	// 创建一个监听器
 	fmt.Println("开始创建一个监听器")
-	l, err := net.Listen("tcp4", "127.0.0.1:8899")
+	l, err := net.Listen("tcp4", "0.0.0.0:8899")
 	if err != nil {
 		log.Fatal(err)
 	}
