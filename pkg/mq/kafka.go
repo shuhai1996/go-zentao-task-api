@@ -8,7 +8,7 @@ import (
 // GetTopicSubscribeList {consumer:topic} consumer以 -consumer命名
 func GetTopicSubscribeList() map[string]string{
 	var m = make(map[string]string)
-	m["action-consumer"] = "zs_action_topic"
+	m["action-consumer"] = "test"
 	return m
 }
 
