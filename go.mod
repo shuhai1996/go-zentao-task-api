@@ -8,7 +8,7 @@ require (
 	github.com/confluentinc/confluent-kafka-go v1.8.2
 	github.com/gin-contrib/static v0.0.1
 	github.com/gin-gonic/gin v1.7.7
-	github.com/golang/protobuf v1.5.2
+	github.com/golang/protobuf v1.5.3
 	github.com/gomodule/redigo v2.0.0+incompatible
 	github.com/google/wire v0.5.0
 	github.com/gorilla/sessions v1.2.1
@@ -21,10 +21,10 @@ require (
 	github.com/tjfoc/gmsm v1.4.1
 	github.com/verystar/ini v1.1.0
 	github.com/withlin/canal-go v1.1.1
-	golang.org/x/text v0.3.7
-	google.golang.org/genproto v0.0.0-20220107163113-42d7afdf6368
-	google.golang.org/grpc v1.43.0
-	google.golang.org/protobuf v1.27.1
+	golang.org/x/text v0.9.0
+	google.golang.org/genproto v0.0.0-20230410155749-daa745c078e1
+	google.golang.org/grpc v1.56.3
+	google.golang.org/protobuf v1.30.0
 	gorm.io/driver/mysql v1.2.2
 	gorm.io/gorm v1.22.4
 )
@@ -51,7 +51,7 @@ require (
 	github.com/smartystreets/goconvey v1.7.2 // indirect
 	github.com/ugorji/go/codec v1.1.7 // indirect
 	golang.org/x/crypto v0.0.0-20211209193657-4570a0811e8b // indirect
-	golang.org/x/net v0.0.0-20211209124913-491a49abca63 // indirect
-	golang.org/x/sys v0.0.0-20210615035016-665e8c7367d1 // indirect
+	golang.org/x/net v0.9.0 // indirect
+	golang.org/x/sys v0.7.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
